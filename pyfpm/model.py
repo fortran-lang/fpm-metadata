@@ -46,28 +46,67 @@ class Build(BaseModel):
 
 
 class Dependency(BaseModel):
+    ...
+
+
+class LocalDependency(Dependency):
     """
-    .. Dependency definition
+    .. Local dependency definition
 
     Defines a dependency on another fpm-enabled project. The definition
-    can take targets under version control systems, like git, or local
-    dependencies declared by relative paths.
+    can reference local dependencies declared by relative paths.
     """
 
-    path: Optional[str]
+    path: str
     """Local target"""
 
-    git: Optional[str]
+
+class GitDependency(Dependency):
+    """
+    .. Remote dependency definition
+
+    Defines a dependency on another fpm-enabled project. The definition
+    can take targets under version control systems, like git.
+    """
+
+    git: str
     """Git repository target"""
 
-    tag: Optional[str]
+
+class GitDependencyTag(GitDependency):
+    """
+    Git dependency using a tag as reference.
+    """
+
+    tag: str
     """Tag in git repository"""
 
-    branch: Optional[str]
+
+class GitDependencyBranch(GitDependency):
+    """
+    Git dependency using a branch name as reference.
+    """
+
+    branch: str
     """Branch in git repository"""
 
-    rev: Optional[str]
+
+class GitDependencyRev(GitDependency):
+    """
+    Git dependency using a commit hash as reference.
+    """
+
+    rev: str
     """Commit hash"""
+
+
+DependencyUnion = Union[
+    LocalDependency,
+    GitDependencyTag,
+    GitDependencyBranch,
+    GitDependencyRev,
+    GitDependency,
+]
 
 
 class Library(BaseModel):
@@ -103,7 +142,7 @@ class Executable(BaseModel):
     link: Union[str, List[str]] = []
     """Libraries to link against"""
 
-    dependencies: Dict[str, Dependency] = {}
+    dependencies: Dict[str, DependencyUnion] = {}
     """Dependency meta data for this executable"""
 
 
@@ -193,8 +232,8 @@ class Manifest(BaseModel):
     test: List[Test] = []
     """Test meta data"""
 
-    dependencies: Dict[str, Dependency] = {}
+    dependencies: Dict[str, DependencyUnion] = {}
     """Dependency meta data"""
 
-    dev_dependencies: Dict[str, Dependency] = Field({}, alias="dev-dependencies")
+    dev_dependencies: Dict[str, DependencyUnion] = Field({}, alias="dev-dependencies")
     """Development dependency meta data"""
