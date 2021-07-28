@@ -44,6 +44,9 @@ class Build(BaseModel):
     link: Union[str, List[str]] = []
     """Libraries to link against"""
 
+    external_modules: Union[str, List[str]] = Field([], alias="external-modules")
+    """Modules used from non-fpm packages"""
+
 
 class Dependency(BaseModel):
     ...
