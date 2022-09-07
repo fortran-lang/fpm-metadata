@@ -18,7 +18,9 @@
 Definition of the manifest format as used by the Fortran package manager (fpm).
 """
 
-from typing import Dict, List, Optional, Union
+from __future__ import annotations
+
+from typing import Any
 from pydantic import BaseModel, Field
 
 
@@ -41,14 +43,20 @@ class Build(BaseModel):
     auto_examples: bool = Field(True, alias="auto-examples")
     """Automatic discovery of examples"""
 
-    link: Union[str, List[str]] = []
+    link: str | list[str] = []
     """Libraries to link against"""
 
-    external_modules: Union[str, List[str]] = Field([], alias="external-modules")
+    external_modules: str | list[str] = Field([], alias="external-modules")
     """Modules used from non-fpm packages"""
 
 
 class Dependency(BaseModel):
+    """
+    .. Dependency
+
+    A dependency on another fpm project.
+    """
+
     ...
 
 
@@ -103,13 +111,13 @@ class GitDependencyRev(GitDependency):
     """Commit hash"""
 
 
-DependencyUnion = Union[
-    LocalDependency,
-    GitDependencyTag,
-    GitDependencyBranch,
-    GitDependencyRev,
-    GitDependency,
-]
+DependencyUnion = (
+    LocalDependency
+    | GitDependencyTag
+    | GitDependencyBranch
+    | GitDependencyRev
+    | GitDependency
+)
 
 
 class Library(BaseModel):
@@ -122,7 +130,7 @@ class Library(BaseModel):
     source_dir: str = Field("src", alias="source-dir")
     """Source path prefix"""
 
-    include_dir: Union[str, List[str]] = Field("include", alias="include-dir")
+    include_dir: str | list[str] = Field("include", alias="include-dir")
     """Include path prefix"""
 
 
@@ -142,10 +150,10 @@ class Executable(BaseModel):
     main: str = "main.f90"
     """Name of the source file declaring the main program"""
 
-    link: Union[str, List[str]] = []
+    link: str | list[str] = []
     """Libraries to link against"""
 
-    dependencies: Dict[str, DependencyUnion] = {}
+    dependencies: dict[str, DependencyUnion] = {}
     """Dependency meta data for this executable"""
 
 
@@ -196,25 +204,25 @@ class Manifest(BaseModel):
     version: str = "0"
     """Project version"""
 
-    license: Optional[str]
+    license: str | None
     """Project license information"""
 
-    maintainer: Union[str, List[str]] = []
+    maintainer: str | list[str] = []
     """Maintainer of the project"""
 
-    author: Union[str, List[str]] = []
+    author: str | list[str] = []
     """Author of the project"""
 
-    copyright: Optional[str]
+    copyright: str | None
     """Copyright of the project"""
 
-    description: Optional[str]
+    description: str | None
     """Description of the project"""
 
-    categories: List[str] = []
+    categories: str | list[str] = []
     """Categories associated with the project"""
 
-    keywords: List[str] = []
+    keywords: list[str] = []
     """Keywords describing the project"""
 
     build = Build()
@@ -226,17 +234,20 @@ class Manifest(BaseModel):
     library = Library()
     """Library meta data"""
 
-    executable: List[Executable] = []
+    executable: list[Executable] = []
     """Executable meta data"""
 
-    example: List[Example] = []
+    example: list[Example] = []
     """Example meta data"""
 
-    test: List[Test] = []
+    test: list[Test] = []
     """Test meta data"""
 
-    dependencies: Dict[str, DependencyUnion] = {}
+    dependencies: dict[str, DependencyUnion] = {}
     """Dependency meta data"""
 
-    dev_dependencies: Dict[str, DependencyUnion] = Field({}, alias="dev-dependencies")
+    dev_dependencies: dict[str, DependencyUnion] = Field({}, alias="dev-dependencies")
     """Development dependency meta data"""
+
+    extra: dict[str, Any] = {}
+    """Additional free data field"""
