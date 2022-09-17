@@ -54,6 +54,30 @@ in Python
    >>> package.version
    '0.2.0'
 
+Alternatively, you can use the ``load_manifest`` function to read a package manifest
+
+.. code:: python
+
+   >>> from pathlib import Path
+   >>> from fpm.metadata import load_manifest
+   >>> package = load_manifest(Path("fpm.toml"))
+   >>> package.name
+   'fpm'
+   >>> package.version
+   '0.2.0'
+
+Finally, you can dump a package manifest to a TOML string using the ``dump_manifest`` function
+
+.. code:: python
+
+   >>> from pathlib import Path
+   >>> from fpm.metadata import dump_manifest, load_manifest
+   >>> package = load_manifest(Path("fpm.toml"))
+   >>> print(dump_manifest(package))
+   name = "fpm"
+   version = "0.2.0"
+   ...
+
 
 Development
 -----------
