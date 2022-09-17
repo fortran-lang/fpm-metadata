@@ -30,7 +30,8 @@ jobs:
           -r requirements.txt
           pytest pytest-cov
           requests
-          tomli
+          ${{ matrix.python == '3.9' && 'tomlkit' || 'tomli' }}
+          ${{ matrix.python == '3.10' && 'tomli-w' || 'tomlkit' }}
 
       - name: Install project
         run: pip install . -v --no-deps
@@ -142,6 +143,14 @@ jobs:
             popd
           done
 
+      - name: Publish to Test PyPI
+        if: ${{ github.event_name == 'release' }}
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: __token__
+          password: ${{ secrets.TEST_PYPI_TOKEN }}
+          repository_url: https://test.pypi.org/legacy/
+
       - name: Upload assets
         uses: svenstaro/upload-release-action@v2
         if: ${{ github.event_name == 'release' }}
@@ -151,3 +160,10 @@ jobs:
           file_glob: true
           tag: ${{ github.ref }}
           overwrite: true
+
+      - name: Publish to PyPI
+        if: ${{ github.event_name == 'release' }}
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_TOKEN }}
