@@ -5,6 +5,10 @@ Python model of the Fortran package manager
    :alt: Latest release
    :target: https://github.com/awvwgk/fpm-metadata/releases/latest
 
+.. image:: https://img.shields.io/pypi/v/fpm-metadata
+   :alt: PyPI
+   :target: https://pypi.org/project/fpm-metadata/
+
 .. image:: https://img.shields.io/github/license/awvwgk/fpm-metadata
    :alt: License
    :target: LICENSE
