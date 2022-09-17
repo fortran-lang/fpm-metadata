@@ -1,0 +1,153 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  release:
+    types: [published]
+
+jobs:
+  pip:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        python: ["3.6", "3.7", "3.8", "3.9", "3.10"]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Select Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Install dependencies
+        run: >-
+          pip install
+          -r requirements.txt
+          pytest pytest-cov
+          requests
+          tomli
+
+      - name: Install project
+        run: pip install . -v --no-deps
+
+      - name: Test package
+        run: pytest tests/ --pyargs pyfpm --doctest-modules --cov=pyfpm -v
+
+      - name: Upload coverage report
+        uses: codecov/codecov-action@v2
+
+  sdist:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Select Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.x"
+
+      - name: Create source distribution
+        run: pipx run build . --sdist --outdir .
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: pyfpm-sdist
+          path: ./*.tar.gz
+          retention-days: 5
+
+  wheel:
+    needs:
+      - sdist
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download sdist
+        uses: actions/download-artifact@v2
+        with:
+          name: pyfpm-sdist
+
+      - name: Select Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.x"
+
+      - name: Build wheel
+        run: |
+          tar xvf ./*.tar.gz
+          pipx run build ./*/ --wheel --outdir .
+
+      - name: Upload wheel
+        uses: actions/upload-artifact@v3
+        with:
+          name: pyfpm-wheel
+          path: ./*.whl
+          retention-days: 5
+
+  schema:
+    needs:
+      - sdist
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download sdist
+        uses: actions/download-artifact@v2
+        with:
+          name: pyfpm-sdist
+
+      - name: Select Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.x"
+
+      - name: Export schema
+        run: |
+          set -ex
+          pip install ./*.tar.gz
+          VERSION=$(pip show pyfpm | awk '/Version/ {print $2}')
+          python -c "${{ env.script }}" > "pyfpm-${VERSION}.json"
+        env:
+          script: |
+            from pyfpm.models import Manifest
+            print(Manifest.schema_json(indent=2))
+
+      - name: Upload schema
+        uses: actions/upload-artifact@v3
+        with:
+          name: pyfpm-schema
+          path: ./*.json
+          retention-days: 5
+
+  release:
+    needs:
+      - sdist
+      - wheel
+      - schema
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: ${{ github.workspace }}  # This will download all files
+
+      - name: Create SHA256 checksums
+        run: |
+          set -ex
+          for output in pyfpm*/pyfpm*; do
+            pushd $(dirname "$output")
+            sha256sum $(basename "$output") | tee $(basename "$output").sha256
+            popd
+          done
+
+      - name: Upload assets
+        uses: svenstaro/upload-release-action@v2
+        if: ${{ github.event_name == 'release' }}
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: pyfpm*/pyfpm*
+          file_glob: true
+          tag: ${{ github.ref }}
+          overwrite: true

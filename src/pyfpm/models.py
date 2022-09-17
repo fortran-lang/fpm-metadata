@@ -13,14 +13,51 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """
-.. Package manifest format
+Package manifest format
+=======================
 
-Definition of the manifest format as used by the Fortran package manager (fpm).
+Definition of the manifest format as used by the Fortran package manager (`fpm`_).
+
+.. _fpm: https://fpm.fortran-lang.org
+
+
+Example
+-------
+
+>>> import tomli as tomllib
+>>> raw = '''
+... name = "toml-f"
+... version = "0.2.4"
+... license = "Apache-2.0 OR MIT"
+... maintainer = ["@awvwgk"]
+... author = ["Sebastian Ehlert"]
+... copyright = "2019-2021 Sebastian Ehlert"
+... homepage = "https://toml-f.github.io/toml-f"
+... keywords = ["toml", "io", "serde"]
+... description = "TOML parser implementation for data serialization and deserialization"
+...
+... [library]
+... source-dir = "src"
+...
+... [build]
+... auto-tests = false
+...
+... [[test]]
+... name = "tftest"
+... source-dir = "test/tftest"
+... [test.dependencies]
+... test-drive.git = "https://github.com/fortran-lang/test-drive.git"
+... '''
+>>> manifest = Manifest(**tomllib.loads(raw))
+>>> manifest.name
+'toml-f'
+>>> manifest.version
+'0.2.4'
+>>> len(manifest.test)
+1
 """
 
-from __future__ import annotations
-
-from typing import Any
+from typing import Any, Dict, List, Optional, Union
 from pydantic import BaseModel, Field
 
 
@@ -43,10 +80,10 @@ class Build(BaseModel):
     auto_examples: bool = Field(True, alias="auto-examples")
     """Automatic discovery of examples"""
 
-    link: str | list[str] = []
+    link: Union[str, List[str]] = []
     """Libraries to link against"""
 
-    external_modules: str | list[str] = Field([], alias="external-modules")
+    external_modules: Union[str, List[str]] = Field([], alias="external-modules")
     """Modules used from non-fpm packages"""
 
 
@@ -111,13 +148,13 @@ class GitDependencyRev(GitDependency):
     """Commit hash"""
 
 
-DependencyUnion = (
-    LocalDependency
-    | GitDependencyTag
-    | GitDependencyBranch
-    | GitDependencyRev
-    | GitDependency
-)
+DependencyUnion = Union[
+    LocalDependency,
+    GitDependencyTag,
+    GitDependencyBranch,
+    GitDependencyRev,
+    GitDependency,
+]
 
 
 class Library(BaseModel):
@@ -130,7 +167,7 @@ class Library(BaseModel):
     source_dir: str = Field("src", alias="source-dir")
     """Source path prefix"""
 
-    include_dir: str | list[str] = Field("include", alias="include-dir")
+    include_dir: Union[str, List[str]] = Field("include", alias="include-dir")
     """Include path prefix"""
 
 
@@ -150,10 +187,10 @@ class Executable(BaseModel):
     main: str = "main.f90"
     """Name of the source file declaring the main program"""
 
-    link: str | list[str] = []
+    link: Union[str, List[str]] = []
     """Libraries to link against"""
 
-    dependencies: dict[str, DependencyUnion] = {}
+    dependencies: Dict[str, DependencyUnion] = {}
     """Dependency meta data for this executable"""
 
 
@@ -204,25 +241,25 @@ class Manifest(BaseModel):
     version: str = "0"
     """Project version"""
 
-    license: str | None
+    license: Optional[str]
     """Project license information"""
 
-    maintainer: str | list[str] = []
+    maintainer: Union[str, List[str]] = []
     """Maintainer of the project"""
 
-    author: str | list[str] = []
+    author: Union[str, List[str]] = []
     """Author of the project"""
 
-    copyright: str | None
+    copyright: Optional[str]
     """Copyright of the project"""
 
-    description: str | None
+    description: Optional[str]
     """Description of the project"""
 
-    categories: str | list[str] = []
+    categories: Union[str, List[str]] = []
     """Categories associated with the project"""
 
-    keywords: list[str] = []
+    keywords: List[str] = []
     """Keywords describing the project"""
 
     build = Build()
@@ -234,20 +271,20 @@ class Manifest(BaseModel):
     library = Library()
     """Library meta data"""
 
-    executable: list[Executable] = []
+    executable: List[Executable] = []
     """Executable meta data"""
 
-    example: list[Example] = []
+    example: List[Example] = []
     """Example meta data"""
 
-    test: list[Test] = []
+    test: List[Test] = []
     """Test meta data"""
 
-    dependencies: dict[str, DependencyUnion] = {}
+    dependencies: Dict[str, DependencyUnion] = {}
     """Dependency meta data"""
 
-    dev_dependencies: dict[str, DependencyUnion] = Field({}, alias="dev-dependencies")
+    dev_dependencies: Dict[str, DependencyUnion] = Field({}, alias="dev-dependencies")
     """Development dependency meta data"""
 
-    extra: dict[str, Any] = {}
+    extra: Dict[str, Any] = {}
     """Additional free data field"""

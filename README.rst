@@ -1,8 +1,24 @@
 Python model of the Fortran package manager
 ===========================================
 
+.. image:: https://img.shields.io/github/v/release/awvwgk/pyfpm
+   :alt: Latest release
+   :target: https://github.com/awvwgk/pyfpm/releases/latest
+
+.. image:: https://img.shields.io/github/license/awvwgk/pyfpm
+   :alt: License
+   :target: LICENSE
+
+.. image:: https://github.com/awvwgk/pyfpm/actions/workflows/CI.yml/badge.svg
+   :alt: CI status
+   :target: https://github.com/awvwgk/pyfpm/actions/workflows/CI.yml
+
+.. image:: https://img.shields.io/codecov/c/gh/awvwgk/pyfpm
+   :alt: Codecov
+   :target: https://codecov.io/gh/awvwgk/pyfpm
+
 This project provides a pydantic model of the fpm package manifest format used
-in the `Fortran package manager <https://github.com/fortran-lang/fpm>`_.
+in the `Fortran package manager <https://fpm.fortran-lang.org>`_.
 
 
 Installation
@@ -12,7 +28,7 @@ Install this project with pip
 
 .. code:: shell
 
-   pip install -e .
+   pip install .
 
 
 Usage
@@ -24,7 +40,7 @@ in Python
 
 .. code:: python
 
-   >>> from pyfpm.model import Manifest
+   >>> from pyfpm.models import Manifest
    >>> from tomlkit import loads
    >>> with open("fpm.toml") as fh:
    ...     package = Manifest(**loads(fh.read()))
@@ -33,6 +49,62 @@ in Python
    'fpm'
    >>> package.version
    '0.2.0'
+
+
+Development
+-----------
+
+This project is hosted on GitHub at `awvwgk/pyfpm <https://github.com/awvwgk/pyfpm>`__.
+Obtain the source by cloning the repository with
+
+.. code::
+
+   git clone https://github.com/awvwgk/pyfpm
+   cd pyfpm
+
+We recommend using a `conda <https://conda.io/>`__ environment to install the package.
+You can setup the environment manager using a `mambaforge <https://github.com/conda-forge/miniforge>`__ installer.
+Install the required dependencies from the conda-forge channel.
+
+.. code::
+
+   mamba env create -n devel -f environment.yml
+   mamba activate devel
+
+Install this project with pip in the environment
+
+.. code::
+
+   pip install .
+
+Add the option ``-e`` for installing in development mode.
+
+The following dependencies are required
+
+- `pydantic <https://pydantic-docs.helpmanual.io/>`__
+- `tomli <https://https://github.com/hukkin/tomli>`__ (tests only)
+- `requests <https://requests.readthedocs.io>`__ (tests only)
+- `pytest <https://docs.pytest.org/>`__ (tests only)
+
+You can check your installation by running the test suite with
+
+.. code::
+
+   pytest tests/ --pyargs pyfpm --doctest-modules
+
+
+For code formatting `black <https://black.readthedocs.io/>`_ is used:
+
+.. code:: shell
+
+   black src/ tests/
+
+
+Contributing
+------------
+
+This is a volunteer open source projects and contributions are always welcome.
+Please, take a moment to read the `contributing guidelines <CONTRIBUTING.md>`__.
 
 
 License
