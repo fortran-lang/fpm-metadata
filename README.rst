@@ -1,21 +1,21 @@
 Python model of the Fortran package manager
 ===========================================
 
-.. image:: https://img.shields.io/github/v/release/awvwgk/pyfpm
+.. image:: https://img.shields.io/github/v/release/awvwgk/fpm-metadata
    :alt: Latest release
-   :target: https://github.com/awvwgk/pyfpm/releases/latest
+   :target: https://github.com/awvwgk/fpm-metadata/releases/latest
 
-.. image:: https://img.shields.io/github/license/awvwgk/pyfpm
+.. image:: https://img.shields.io/github/license/awvwgk/fpm-metadata
    :alt: License
    :target: LICENSE
 
-.. image:: https://github.com/awvwgk/pyfpm/actions/workflows/CI.yml/badge.svg
+.. image:: https://github.com/awvwgk/fpm-metadata/actions/workflows/CI.yml/badge.svg
    :alt: CI status
-   :target: https://github.com/awvwgk/pyfpm/actions/workflows/CI.yml
+   :target: https://github.com/awvwgk/fpm-metadata/actions/workflows/CI.yml
 
-.. image:: https://img.shields.io/codecov/c/gh/awvwgk/pyfpm
+.. image:: https://img.shields.io/codecov/c/gh/awvwgk/fpm-metadata
    :alt: Codecov
-   :target: https://codecov.io/gh/awvwgk/pyfpm
+   :target: https://codecov.io/gh/awvwgk/fpm-metadata
 
 This project provides a pydantic model of the fpm package manifest format used
 in the `Fortran package manager <https://fpm.fortran-lang.org>`_.
@@ -28,7 +28,7 @@ Install this project with pip
 
 .. code:: shell
 
-   pip install .
+   pip install git+https://github.com/awvwgk/fpm-metadata
 
 
 Usage
@@ -40,7 +40,7 @@ in Python
 
 .. code:: python
 
-   >>> from pyfpm.models import Manifest
+   >>> from fpm.metadata import Manifest
    >>> from tomlkit import loads
    >>> with open("fpm.toml") as fh:
    ...     package = Manifest(**loads(fh.read()))
@@ -54,13 +54,13 @@ in Python
 Development
 -----------
 
-This project is hosted on GitHub at `awvwgk/pyfpm <https://github.com/awvwgk/pyfpm>`__.
+This project is hosted on GitHub at `awvwgk/fpm-metadata <https://github.com/awvwgk/fpm-metadata>`__.
 Obtain the source by cloning the repository with
 
 .. code::
 
-   git clone https://github.com/awvwgk/pyfpm
-   cd pyfpm
+   git clone https://github.com/awvwgk/fpm-metadata
+   cd fpm-metadata
 
 We recommend using a `conda <https://conda.io/>`__ environment to install the package.
 You can setup the environment manager using a `mambaforge <https://github.com/conda-forge/miniforge>`__ installer.
@@ -90,7 +90,7 @@ You can check your installation by running the test suite with
 
 .. code::
 
-   pytest tests/ --pyargs pyfpm --doctest-modules
+   pytest tests/ --pyargs fpm.metadata --doctest-modules
 
 
 For code formatting `black <https://black.readthedocs.io/>`_ is used:

@@ -3,7 +3,7 @@ import requests
 import tomli as toml
 from pathlib import Path
 
-from pyfpm.models import Manifest
+from fpm.metadata import Manifest
 
 
 root = Path(__file__).parent
