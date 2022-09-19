@@ -1,6 +1,6 @@
-# Contributing to pyfpm
+# Contributing to fpm-metadata
 
-First off, thank you for considering contributing to pyfpm.
+First off, thank you for considering contributing to fpm-metadata.
 Please take a moment to review this guidelines to make the contribution process
 simple and effective for all involved.
 
@@ -26,7 +26,7 @@ A good bug report should not leave others needing to chase you up for more
 information. So please try to be as detailed as possible in your report,
 answer at least these questions:
 
-1. Which version of pyfpm are you using? The current version is always
+1. Which version of fpm-metadata are you using? The current version is always
    a subject to change, so be more specific.
 2. What steps will reproduce the issue?
    We have to reproduce the issue, so we need all the input files.
@@ -63,7 +63,7 @@ You can learn how from
 [this great tutorial](https://app.egghead.io/courses/how-to-contribute-to-an-open-source-project-on-github).
 
 Don't know where to start?
-You can start by looking through these [issues](https://github.com/awvwgk/pyfpm/issues).
+You can start by looking through these [issues](https://github.com/fortran-lang/fpm-metadata/issues).
 
 
 ## Sign Your Work

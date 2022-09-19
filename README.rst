@@ -1,25 +1,25 @@
 Python model of the Fortran package manager
 ===========================================
 
-.. image:: https://img.shields.io/github/v/release/awvwgk/fpm-metadata
+.. image:: https://img.shields.io/github/v/release/fortran-lang/fpm-metadata
    :alt: Latest release
-   :target: https://github.com/awvwgk/fpm-metadata/releases/latest
+   :target: https://github.com/fortran-lang/fpm-metadata/releases/latest
 
 .. image:: https://img.shields.io/pypi/v/fpm-metadata
    :alt: PyPI
    :target: https://pypi.org/project/fpm-metadata/
 
-.. image:: https://img.shields.io/github/license/awvwgk/fpm-metadata
+.. image:: https://img.shields.io/github/license/fortran-lang/fpm-metadata
    :alt: License
    :target: LICENSE
 
-.. image:: https://github.com/awvwgk/fpm-metadata/actions/workflows/CI.yml/badge.svg
+.. image:: https://github.com/fortran-lang/fpm-metadata/actions/workflows/CI.yml/badge.svg
    :alt: CI status
-   :target: https://github.com/awvwgk/fpm-metadata/actions/workflows/CI.yml
+   :target: https://github.com/fortran-lang/fpm-metadata/actions/workflows/CI.yml
 
-.. image:: https://img.shields.io/codecov/c/gh/awvwgk/fpm-metadata
+.. image:: https://img.shields.io/codecov/c/gh/fortran-lang/fpm-metadata
    :alt: Codecov
-   :target: https://codecov.io/gh/awvwgk/fpm-metadata
+   :target: https://codecov.io/gh/fortran-lang/fpm-metadata
 
 This project provides a pydantic model of the fpm package manifest format used
 in the `Fortran package manager <https://fpm.fortran-lang.org>`_.
@@ -32,7 +32,7 @@ Install this project with pip
 
 .. code:: shell
 
-   pip install git+https://github.com/awvwgk/fpm-metadata
+   pip install git+https://github.com/fortran-lang/fpm-metadata
 
 
 Usage
@@ -82,12 +82,12 @@ Finally, you can dump a package manifest to a TOML string using the ``dump_manif
 Development
 -----------
 
-This project is hosted on GitHub at `awvwgk/fpm-metadata <https://github.com/awvwgk/fpm-metadata>`__.
+This project is hosted on GitHub at `fortran-lang/fpm-metadata <https://github.com/fortran-lang/fpm-metadata>`__.
 Obtain the source by cloning the repository with
 
 .. code::
 
-   git clone https://github.com/awvwgk/fpm-metadata
+   git clone https://github.com/fortran-lang/fpm-metadata
    cd fpm-metadata
 
 We recommend using a `conda <https://conda.io/>`__ environment to install the package.
