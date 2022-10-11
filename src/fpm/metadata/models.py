@@ -227,6 +227,23 @@ class Install(BaseModel):
     """Install library with this project"""
 
 
+class Preprocess(BaseModel):
+    """
+    .. Preprocessing settings
+
+    Preprocessing directives for the project.
+    """
+
+    macros: List[str] = []
+    """Preprocessor macros e.g. ['HAVE_MPI', 'VALUE=1', 'VERSION={version}']"""
+
+    directories: List[str] = []
+    """Include directories"""
+
+    suffixes: List[str] = []
+    """Suffixes the preprocessor should run on"""
+
+
 class Manifest(BaseModel):
     """
     .. Package manifest settings
