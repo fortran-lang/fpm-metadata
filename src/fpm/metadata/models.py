@@ -302,6 +302,9 @@ class Manifest(BaseModel):
 
     dev_dependencies: Dict[str, DependencyUnion] = Field({}, alias="dev-dependencies")
     """Development dependency meta data"""
+    
+    preprocess: Dict[Literal["cpp"], Preprocess] = {}
+    """Preprocessor meta data"""
 
     extra: Dict[str, Any] = {}
     """Additional free data field"""
