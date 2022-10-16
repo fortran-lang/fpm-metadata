@@ -234,13 +234,13 @@ class Preprocess(BaseModel):
     Preprocessing directives for the project.
     """
 
-    macros: List[str] = []
+    macros: Union[str, List[str]] = []
     """Preprocessor macros e.g. ['HAVE_MPI', 'VALUE=1', 'VERSION={version}']"""
 
-    directories: List[str] = []
+    directories: Union[str, List[str]] = []
     """Include directories"""
 
-    suffixes: List[str] = []
+    suffixes: Union[str, List[str]]= []
     """Suffixes the preprocessor should run on"""
 
 
