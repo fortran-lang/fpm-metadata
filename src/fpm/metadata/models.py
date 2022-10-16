@@ -57,7 +57,7 @@ Example
 1
 """
 
-from typing import Any, Dict, Literal, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 from pydantic import BaseModel, Field
 
 
@@ -303,7 +303,7 @@ class Manifest(BaseModel):
     dev_dependencies: Dict[str, DependencyUnion] = Field({}, alias="dev-dependencies")
     """Development dependency meta data"""
     
-    preprocess: Dict[Literal["cpp"], Preprocess] = {}
+    preprocess: Dict[str, Preprocess] = {}
     """Preprocessor meta data"""
 
     extra: Dict[str, Any] = {}
