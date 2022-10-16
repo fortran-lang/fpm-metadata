@@ -227,6 +227,23 @@ class Install(BaseModel):
     """Install library with this project"""
 
 
+class Preprocess(BaseModel):
+    """
+    .. Preprocessing settings
+
+    Preprocessing directives for the project.
+    """
+
+    macros: Union[str, List[str]] = []
+    """Preprocessor macros e.g. ['HAVE_MPI', 'VALUE=1', 'VERSION={version}']"""
+
+    directories: Union[str, List[str]] = []
+    """Include directories"""
+
+    suffixes: Union[str, List[str]]= []
+    """Suffixes the preprocessor should run on"""
+
+
 class Manifest(BaseModel):
     """
     .. Package manifest settings
@@ -285,6 +302,9 @@ class Manifest(BaseModel):
 
     dev_dependencies: Dict[str, DependencyUnion] = Field({}, alias="dev-dependencies")
     """Development dependency meta data"""
+    
+    preprocess: Dict[str, Preprocess] = {}
+    """Preprocessor meta data"""
 
     extra: Dict[str, Any] = {}
     """Additional free data field"""
